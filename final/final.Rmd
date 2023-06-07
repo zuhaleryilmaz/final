@@ -1,0 +1,130 @@
+---
+title: "An Estimate On The Figures Of Live Animal And Animal Meat Imports Of World Countries"
+author: 
+  - Eryılmaz, Fatma Zühal[^1]
+bibliography: ../bibliography/biblio.bib
+csl: ../csl/apa.csl
+header-includes:
+  - \usepackage{polyglossia}
+  - \setmainlanguage{english}
+  - \usepackage{booktabs}
+  - \usepackage{caption} 
+  - \captionsetup[table]{skip=10pt}
+output:
+  bookdown::pdf_document2:
+    fig_caption: yes
+    fig_height: 3
+    fig_width: 4
+    keep_tex: no
+    latex_engine: xelatex
+    number_sections: yes
+    toc: no
+geometry: margin=1in
+link-citations: yes
+urlcolor: blue
+fontsize: 12pt
+biblio-style: apalike
+abstract: |
+    Write your abstract here.
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+<!-- ======================================================================= -->
+<!-- ============================== FOOTNOTES ============================== -->
+<!-- ======================================================================= -->
+[^1]: 20080389, [Github Repo](https://github.com/zuhaleryilmaz/final)
+
+# Important Information About Midterm
+
+\colorbox{BurntOrange}{WRITE YOUR GITHUB REPO LINK ON LINE 37 IN THIS FILE!}
+
+**Project Proposal submisson will be done by uploading a zip file to the ekampus system along with the Github repo link. If you do not upload a zip file to the system and do not provide a Github repo link, you will be deemed not to have entered the midterm and final exams.**
+
+**You must upload your project folder (`YourStudentID.zip` file) to *ekampus.ankara.edu.tr* until 9 June 2023, 23:59.**
+
+\colorbox{WildStrawberry}{Read the README.md file in the project folder for more information.}
+
+# Introduction
+Live animal imports are important because different species need to be brought in to ensure continued breeding. However, live animal imports also come with many risks. When health screenings for live animals imported from different countries are not sufficiently conducted, the spread of animal diseases is inevitable. This situation can threaten a country's own animal population and cause problems throughout the food supply chain.
+
+Animal meat imports are a more widespread practice than live animal imports. Many countries import animal meat to meet their own meat consumption needs. The most important reason for animal meat imports is that countries cannot meet their own meat consumption needs. Furthermore, imported animals must meet high standards in terms of both health and quality. Therefore, countries that will engage in animal meat imports have some restrictions.
+
+While live animal and animal meat imports can provide many economic benefits, they can be risky for local producers. The import sector may reduce the business volume and increase the costs of local producers. However, it is believed that the quality and low prices of imports can contribute to the development of the animal meat sector in the country.
+
+Countries can promote local production while conducting controlled imports by collaborating with governments and local sectors. In this way, both local producers can be supported and the benefits of imports can be maximized. The importance of live animal and animal meat imports worldwide, as well as the risks they pose, should be managed consciously and systematically.
+
+According to the past years’ live animal and animal meat import figures, it is predicted that this trend will continue in 2023. Live animal and animal meat import is an important sector worldwide. It is believed that developing a strategy to increase their own production will help countries mitigate the environmental, health, and economic risks that this trade can pose.
+
+## Literature Review
+
+The literature emphasizes the need for transparency and collaboration among different countries and stakeholders in the trade of live animals and animal products. @narrod:2014 The exchange of information on animal health and disease outbreaks, as well as the adoption of common standards and best practices, can help reduce the risk of disease spread and facilitate trade. Meat trade flows among countries and world regions are determined largely by differences among countries in their resource base, their preferences for meat types and cuts, the extent and character of barriers to trade, and the industry structure (@galloway:2007).
+
+In addition, some experts also call for a shift towards more sustainable and ethical practices in the global food supply chain, including reducing the dependence on animal-based products and promoting local production and consumption. @nelson:2003 This approach can not only help reduce the risks associated with the trade of live animals and animal products but also contribute to the broader goals of environmental sustainability, animal welfare, and public health in Turkey (@aydogdu:2018)
+
+# Data
+In this section, discuss the source of the data set you use in your study, if you have done any operation on the raw data, these operations and the summary statistics about the data set. In this section, it is mandatory to have a table (Table \ref{tab:summary}) containing summary statistics (mean, standard deviation, minimum, maximum, etc. values) of all variables. Make the necessary references to your tables as shown in the previous sentence [@perkins:1991].
+
+R codes for the analysis should start in this section. In this section, you should include the codes that imports the data set into R and the codes that generate summary statistics.
+
+```{r}
+library(tidyverse)
+library(here)
+survey <- read_csv(here("data/survey.csv"))
+```
+
+Note that code options are edited in some of the code chunks in the Rmd file.
+
+```{r, echo=FALSE}
+library(xtable) 
+library(summarytools)
+st_options(lang = "en")
+```
+
+With the `echo=FALSE` option, prevent the codes from appearing in the derived pdf file and report your results in tables.
+
+```{r results='asis', echo=FALSE}
+survey %>%
+  select("sex", "credits", "handedness", "height", "handspan") %>% 
+  descr(stats = c("mean", "sd", "min", "med", "max"), transpose = TRUE) %>% 
+  xtable(caption = "Summary Statistics",
+         label = "tab:summary",
+         align = c("l", "c", "c", "c", "c", "c")) %>% 
+  print(booktabs = TRUE, comment = FALSE, caption.placement = "top")
+```
+
+
+# Methods and Data Analysis
+In this section describe the methods that you use to achieve the purpose of the study. You should use the appropriate analysis methods (such as hypothesis tests and correlation analysis) that we covered in the class. If you want, you can also use other methods that we haven't covered. If you think some method is more suitable for the purpose of the analysis and the data set, you can use that method [@newbold:2003; @verzani:2014; @wickham:2014; @wooldridge:2015a].
+
+For example, if you are performing regression analysis, discuss your predicted equation in this section. Write your equations and mathematical expressions using $LaTeX$.
+
+$$
+Y_t = \beta_0 + \beta_N N_t + \beta_P P_t + \beta_I I_t + \varepsilon_t
+$$
+
+This section should also include different tables and plots. You can add histograms, scatter plots (such as Figure \@ref(fig:plot)), box plots, etc. Make the necessary references to your figures as shown in the previous sentence.
+
+
+```{r plot, fig.align='center', fig.cap='An Awesome Plot'}
+survey %>% 
+  ggplot(aes(x = handedness, y = handspan)) +
+  geom_point() +
+  geom_smooth() +
+  scale_x_continuous("Handedness") + 
+  scale_y_continuous("Handspan")
+```
+
+
+# Conclusion
+Summarize the results of your analysis in this section. Discuss to what extent your results responded to the research question you identified at the beginning and how this work could be improved in the future.
+
+**References section is created automatically by Rmarkdown. There is no need to change the references section in the draft file.**
+
+**_You shouldn't delete the last 3 lines. Those lines are required for References section._**
+
+\newpage
+# References {#references}
+<div id="refs"></div>
+
