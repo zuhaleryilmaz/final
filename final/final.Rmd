@@ -9,7 +9,7 @@ header-includes:
   - \setmainlanguage{english}
   - \usepackage{booktabs}
   - \usepackage{caption} 
-  - \captionsetup[table]{skip=10pt}
+  - \captionsetup[table]{skip=8pt}
 output:
   bookdown::pdf_document2:
     fig_caption: yes
@@ -25,7 +25,7 @@ urlcolor: blue
 fontsize: 12pt
 biblio-style: apalike
 abstract: |
-    Write your abstract here.
+   Meat consumption is linked not only to macroeconomic uncertainties and GDP shocks, but also to living standards, nutrition, animal production and consumer prices. Meat is characterized by higher production costs and higher producer prices than other raw materials. Demand for meat is associated with rising incomes and changes in food consumption due to urbanization, with a preference for higher levels of protein from animal sources in the diet. While the global meat industry provides food and livelihoods for billions of people, it also has a significant impact on the environment and the health of the planet. 
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
@@ -36,15 +36,8 @@ knitr::opts_chunk$set(cache = FALSE, echo = TRUE, message = FALSE, warning = FAL
 <!-- ======================================================================= -->
 [^1]: 20080389, [Github Repo](https://github.com/zuhaleryilmaz/final)
 
-# Important Information About Midterm
 
-\colorbox{BurntOrange}{WRITE YOUR GITHUB REPO LINK ON LINE 37 IN THIS FILE!}
 
-**Project Proposal submisson will be done by uploading a zip file to the ekampus system along with the Github repo link. If you do not upload a zip file to the system and do not provide a Github repo link, you will be deemed not to have entered the midterm and final exams.**
-
-**You must upload your project folder (`YourStudentID.zip` file) to *ekampus.ankara.edu.tr* until 9 June 2023, 23:59.**
-
-\colorbox{WildStrawberry}{Read the README.md file in the project folder for more information.}
 
 # Introduction
 Live animal imports are important because different species need to be brought in to ensure continued breeding. However, live animal imports also come with many risks. When health screenings for live animals imported from different countries are not sufficiently conducted, the spread of animal diseases is inevitable. This situation can threaten a country's own animal population and cause problems throughout the food supply chain.
@@ -64,17 +57,26 @@ The literature emphasizes the need for transparency and collaboration among diff
 In addition, some experts also call for a shift towards more sustainable and ethical practices in the global food supply chain, including reducing the dependence on animal-based products and promoting local production and consumption. @nelson:2003 This approach can not only help reduce the risks associated with the trade of live animals and animal products but also contribute to the broader goals of environmental sustainability, animal welfare, and public health in Turkey (@aydogdu:2018)
 
 # Data
-In this section, discuss the source of the data set you use in your study, if you have done any operation on the raw data, these operations and the summary statistics about the data set. In this section, it is mandatory to have a table (Table \ref{tab:summary}) containing summary statistics (mean, standard deviation, minimum, maximum, etc. values) of all variables. Make the necessary references to your tables as shown in the previous sentence [@perkins:1991].
 
-R codes for the analysis should start in this section. In this section, you should include the codes that imports the data set into R and the codes that generate summary statistics.
 
-```{r}
+My Dataset Kaggle.com i bought it from his site.After transferring the yield to the program, na.i cleaned it with the omit code.I have determined the data I will use and created tables for them.
+
+https://data.oecd.org/agroutput/meat-consumption.htm
+
+OECD/FAO (2017), ”OECD-FAO Agricultural Outlook", OECD Agriculture statistics (database). doi: dx.doi.org/10.1787/agr-outl-data-en (Accessed on 24 January 2018)
+
+
+
+A summary table shows which types of meat are consumed more and which types are consumed less. Additionally, we can observe how consumption varies by meat type and which types have a more even distribution.The results in this table can also be used to further analyze and strategize performance differences between multiple meats.
+
+
+```{r, echo=FALSE}
 library(tidyverse)
-library(here)
-survey <- read_csv(here("data/survey.csv"))
+library(dplyr)
+library(magrittr)
+library(summariser)
 ```
 
-Note that code options are edited in some of the code chunks in the Rmd file.
 
 ```{r, echo=FALSE}
 library(xtable) 
@@ -82,47 +84,125 @@ library(summarytools)
 st_options(lang = "en")
 ```
 
-With the `echo=FALSE` option, prevent the codes from appearing in the derived pdf file and report your results in tables.
-
-```{r results='asis', echo=FALSE}
-survey %>%
-  select("sex", "credits", "handedness", "height", "handspan") %>% 
-  descr(stats = c("mean", "sd", "min", "med", "max"), transpose = TRUE) %>% 
-  xtable(caption = "Summary Statistics",
-         label = "tab:summary",
-         align = c("l", "c", "c", "c", "c", "c")) %>% 
-  print(booktabs = TRUE, comment = FALSE, caption.placement = "top")
+```{r, echo=FALSE}
+library(tidyverse)
+m.eat <- read_csv("C:\\Users\\90546\\Desktop\\final\\data\\m.eat.csv")
 ```
+
+
 
 
 # Methods and Data Analysis
-In this section describe the methods that you use to achieve the purpose of the study. You should use the appropriate analysis methods (such as hypothesis tests and correlation analysis) that we covered in the class. If you want, you can also use other methods that we haven't covered. If you think some method is more suitable for the purpose of the analysis and the data set, you can use that method [@newbold:2003; @verzani:2014; @wickham:2014; @wooldridge:2015a].
-
-For example, if you are performing regression analysis, discuss your predicted equation in this section. Write your equations and mathematical expressions using $LaTeX$.
-
-$$
-Y_t = \beta_0 + \beta_N N_t + \beta_P P_t + \beta_I I_t + \varepsilon_t
-$$
-
-This section should also include different tables and plots. You can add histograms, scatter plots (such as Figure \@ref(fig:plot)), box plots, etc. Make the necessary references to your figures as shown in the previous sentence.
 
 
-```{r plot, fig.align='center', fig.cap='An Awesome Plot'}
-survey %>% 
-  ggplot(aes(x = handedness, y = handspan)) +
-  geom_point() +
-  geom_smooth() +
-  scale_x_continuous("Handedness") + 
-  scale_y_continuous("Handspan")
+
+```{r, echo=FALSE}
+library(xtable) 
+library(summarytools)
+st_options(lang = "en")
+
+```
+
+```{r, echo=FALSE}
+library(tidyverse)
+m.eat <- read_csv("C:\\Users\\90546\\Desktop\\final\\data\\m.eat.csv")
+
+```
+```{r, echo=FALSE}
+meatdf_kg <- m.eat %>% 
+  filter(MEASURE == 'KG_CAP') %>% 
+  select(-MEASURE) %>% 
+  rename(VALUE_KG_CAP = Value)
+View(meatdf_kg)
+
+```
+```{r, echo=FALSE}
+meatdf_kg_type <- meatdf_kg %>% 
+  group_by(LOCATION, SUBJECT) %>% 
+  summarize(VALUE_KG_CAP_Mean = mean(VALUE_KG_CAP), .groups ='drop') %>% 
+  arrange(desc(VALUE_KG_CAP_Mean))
+View(meatdf_kg_type)
+
+```
+```{r, echo=FALSE}
+ggplot(data = meatdf_kg_type, aes(x = SUBJECT, y = VALUE_KG_CAP_Mean, fill = SUBJECT)) + 
+  geom_bar(stat = "identity", width = 0.5) +
+labs(title = 'Top most consumed type of meat:1990-2026', main= 0.5 , subtitle = 'unit: kg per cap')
+
 ```
 
 
+
+
+This graph was used to analyze the annual meat consumption per capita and to examine which types of meat are consumed the most. At first glance, chicken meat stands out as the type of meat whose average gram consumed per capita is the highest for almost all years. In addition, lamb and beef consumption figures show a downward trend, while pork consumption figures follow a horizontal line. According to these data, it cannot be said that there has been a big shift in meat consumption, but it can be concluded that chicken meat is a more preferable type of meat due to the increase in chicken consumption.
+
+
+
+
+
+```{r, echo=FALSE}
+meatdf_kg_time <- meatdf_kg %>% 
+  group_by(TIME, SUBJECT) %>% 
+  summarize(VALUE_KG_CAP_Mean = mean(VALUE_KG_CAP))
+```
+```{r, echo=FALSE}
+ggplot(data = meatdf_kg_time, aes(x = TIME, y = VALUE_KG_CAP_Mean, group = SUBJECT)) +
+  geom_line(linetype = 'dashed', size = 1.2, aes(color = SUBJECT)) +
+  geom_point(size = 3, aes(color = SUBJECT)) + 
+  labs(title = 'The evolution of meat consumption per cap by years', subtitle = 'unit: kg/cap')
+
+```
+
+
+
+
+
+This graph shows which types of meat are consumed more in per capita meat consumption over the years and how this consumption has developed.
+
+Looking at the graph, it can be seen that the consumption of chicken meat is increasing rapidly and, unlike all other types of meat, shows a constantly rising trend. In addition, red meat, namely beef, lamb and pork, has shown a marked decreasing trend in recent years. However, due to a relatively slight increase in total meat consumption, chicken meat consumption increased, while red meat consumption decreased.
+
+This graph helps us to easily Decipher the trends in meat consumption over the years and shows that chicken meat has an increasing popularity among all other types of meat.
+
+
+
+
+```{r, echo=FALSE}
+ggplot(data = meatdf_kg_type %>% group_by(SUBJECT)%>% slice(1:5), aes(fill=LOCATION, x = SUBJECT, y = VALUE_KG_CAP_Mean))+
+  geom_bar(position = 'dodge', stat = 'identity') +
+  labs(title = '1990-2026:Top 5 most meat consumption countries by type', subtitle = 'unit: kg/cap')
+
+```
+
+
+
+
+The purpose of this graph is to show the top 5 countries with the highest per capita consumption of various meat types.
+
+Looking at the graph, it can be observed that chicken is the most consumed meat type, indicating an increase in chicken meat consumption in the majority of the five countries. It is also noteworthy that among these five countries, there are developed countries such as the United States, Australia, and Canada, with high levels of meat consumption.
+
+This graph provides an insight into the meat consumption of countries worldwide based on meat types. Additionally, it demonstrates that chicken meat consumption is the highest among all meat types and that meat consumption is particularly high in some countries, especially in developed countries.
+
+```{r echo=FALSE}
+et1 <- meatdf_kg_type$VALUE_KG_CAP_Mean[meatdf_kg_type$SUBJECT == "Beef"]
+et2 <- meatdf_kg_type$VALUE_KG_CAP_Mean[meatdf_kg_type$SUBJECT == "Sheep"]
+et1 <- c(27.721815, 24.460362, 23.282770, 20.130336)
+et2 <- c(19.26238,14.888964, 8.044462, 8.643369)
+
+t.test(et1, et2)
+
+```
+I checked the consumption rate of beef and sheep meat with a T-test every 10 years.
+
+
 # Conclusion
-Summarize the results of your analysis in this section. Discuss to what extent your results responded to the research question you identified at the beginning and how this work could be improved in the future.
+After analyzing, it can be concluded that there is no significant correlation between the type of meat and the consumption amount. Although chicken meat is the most popular among all types of meat, it cannot be concluded that chicken consumption will continue to rise and dominate the meat market in the future.
 
-**References section is created automatically by Rmarkdown. There is no need to change the references section in the draft file.**
+The first graph shows that chicken is more preferred among all types of meat compared to beef and pork. The second graph reveals that chicken is the most consumed type of meat worldwide, but we also observe a decline in red meat consumption. The third graph indicates the top five countries with the highest meat consumption rates, with chicken consumption leading the way in most countries.
 
-**_You shouldn't delete the last 3 lines. Those lines are required for References section._**
+Although we did not find a direct relationship between meat types and the amount being consumed, this analysis provides valuable insights into global meat consumption patterns. To improve this analysis in the future, more data could be collected to cover a longer time frame or a larger sample size of countries. It could also be beneficial to include the environmental impact of meat consumption and consumers' attitudes towards animal welfare in this analysis.
+
+In conclusion, our analysis suggests there is no significant correlation between meat types and the amount being consumed. However, chicken meat remains the most popular among all types of meat and the decline in red meat consumption suggests that consumer preferences and habits may change over time.
+
 
 \newpage
 # References {#references}
